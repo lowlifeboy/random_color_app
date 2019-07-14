@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Random Color App',
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blue,
       ),
       home: RandomColor(),
     );
@@ -28,6 +28,7 @@ class RandomColorState extends State<RandomColor> {
   final Random _random = Random();
 
   Color _color = Color(0xFFFFFFFF);
+  List<int> lastListChilds = new List();
 
   int r = 0;
   int g = 0;
@@ -44,27 +45,83 @@ class RandomColorState extends State<RandomColor> {
     });
   }
 
+  void resetColor() {
+    setState(() {
+      _color = Color(0xFFFFFFFF);
+    });
+  }
+
   Widget _currentColor(r, g, b, o, _color) {
-    return new Container(
-      decoration: new BoxDecoration(
-        color: _color,
-      ),
-      child: new Center(
-        child: new Container(
-          child: new Text('Hey there\n\nrgba($r, $g, $b, $o)'),
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5.0),
-            boxShadow: [
-            const BoxShadow(
-              offset: const Offset(2.0, 2.0),
-              blurRadius: 2.0,
-              spreadRadius: -1.0,
-              color: const Color(0x44000000)),
-            ],
-          ),
+    return new Container( 
+      width: MediaQuery.of(context).size.width,
+      child: 
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.3),
+                      offset: Offset(1.0, 3.0),
+                      spreadRadius: -3.0,
+                      blurRadius: 3.0,
+                    ),
+                  ],
+                ),
+                child: Text('rgba($r, $g, $b, $o)'),
+              ),
+            ),
+            Container(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.3),
+                      offset: Offset(1.0, 3.0),
+                      spreadRadius: -3.0,
+                      blurRadius: 3.0,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Hey there', 
+                  style: TextStyle(
+                    fontFamily: 'DancingScriptBold',
+                    fontSize: 20,
+                    color: _color, 
+                    shadows: [
+                      Shadow(
+                        blurRadius: 2.0,
+                        color: Color.fromRGBO(0, 0, 0, 0.3),
+                        offset: Offset(1.0, 1.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+              child: FloatingActionButton(
+                onPressed: resetColor,
+                child: Icon(Icons.replay),
+              ),
+            ),
+          ],
         ),
+      decoration: BoxDecoration(
+        color: _color,
       ),
     );
   }
